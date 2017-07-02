@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="4">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolBarNewTweet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:titleTextColor="@android:color/white"
+            android:background="@color/colorToolbar">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:elevation="6dp"
+                android:id="@+id/view2"
+                app:cardCornerRadius="20dp"
+                android:foregroundGravity="right"
+                android:layout_gravity="right"
+                android:layout_centerHorizontal="true"
+                android:layout_marginRight="10dp"
+                android:innerRadius="0dp"
+                android:shape="ring"
+                android:thicknessRatio="0.8">
+                <ImageView
+                    android:layout_height="40dp"
+                    android:layout_width="match_parent"
+                    android:id="@+id/imageView1"
+                    tool:src="@drawable/avatar"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true">
+                </ImageView>
+            </android.support.v7.widget.CardView>
+
+        </android.support.v7.widget.Toolbar>
+
+        <EditText
+            android:id="@+id/edTweet"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="5dp"
+            android:layout_weight="4"
+            android:background="@color/colorToolbar"
+            android:gravity="top|left"
+            android:lines="10"
+            android:textColor="@android:color/white"
+            android:hint="What's happening?"
+            android:textColorHint="@color/gray"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/colorToolbar"
+            android:layout_marginTop="2dp"
+            android:weightSum="1">
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/txtAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/gray"
+                android:layout_marginTop="10dp"
+                android:text="140"/>
+
+            <Button
+                android:id="@+id/btnTweet"
+                android:layout_width="90dp"
+                android:layout_height="40dp"
+                android:textAllCaps="false"
+                android:text="Tweet"
+                android:textColor="@color/gray"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="17dp"
+                android:background="@drawable/tweet_button"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SimpleTwitter</string>
+    <string name="intent_scheme">oauth</string>
+    <string name="intent_host">codepathtweets</string>
+</resources>
