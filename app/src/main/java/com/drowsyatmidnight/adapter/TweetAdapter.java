@@ -5,17 +5,20 @@ import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.drowsyatmidnight.holder.ItemTweet;
 import com.drowsyatmidnight.holder.ItemTweetImage;
 import com.drowsyatmidnight.holder.ItemTweetVideo;
-import com.drowsyatmidnight.model.TimelineTweet;
+import com.drowsyatmidnight.model.TimeLine;
+import com.drowsyatmidnight.model.Variants;
 import com.drowsyatmidnight.simpletwitter.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -24,13 +27,12 @@ import java.util.Locale;
  */
 
 public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<TimelineTweet> data;
+    private List<TimeLine> data;
     private Context context;
     private Listener listener;
 
     private static final int tweet = 0;
     private static final int tweetImg = 1;
-    private static final int tweetVideo =2;
 
     public interface Listener{
         void onLoadMore();
@@ -40,23 +42,19 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.listener = listener;
     }
 
-    public TweetAdapter(List<TimelineTweet> data, Context context) {
+    public TweetAdapter(List<TimeLine> data, Context context) {
         this.data = data;
         this.context = context;
     }
 
     @Override
     public int getItemViewType(int position) {
-        TimelineTweet sample = data.get(position);
-        if(sample.getMedia_url()==null&&sample.getVideoTweet()==null){
+        TimeLine sample = data.get(position);
+        if(sample.getExtended_entities()==null){
             return 0;
-        }else {
-            if(sample.getVideoTweet()==null){
-                return 1;
-            }else {
-                return 2;
-            }
-        }
+        }if(sample.getExtended_entities().getMedia().get(0).getVideo_info()==null){
+            return 1;
+        }else return 2;
     }
 
     @Override
@@ -74,7 +72,7 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        TimelineTweet tweet = data.get(position);
+        TimeLine tweet = data.get(position);
         if(holder instanceof ItemTweet){
             bindViewTweet((ItemTweet) holder, tweet);
         }else {
@@ -92,38 +90,52 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
-    private void bindViewTweetVideo(ItemTweetVideo holder, TimelineTweet tweet) {
+    private void bindViewTweetVideo(ItemTweetVideo holder, TimeLine tweet) {
         Glide.with(context)
-                .load(tweet.getUserTwee().getProfile_image_url())
+                .load(tweet.getUser().getProfile_image_url())
                 .into(holder.imageAvatar2);
-        holder.txtUserName2.setText(tweet.getUserTwee().getName());
-        holder.txtRealName2.setText("@"+tweet.getUserTwee().getScreen_name());
+        holder.txtUserName2.setText(tweet.getUser().getName());
+        holder.txtRealName2.setText("@"+tweet.getUser().getScreen_name());
         holder.txtTimeStamp2.setText(getRelativeTimeAgo(tweet.getCreated_at()));
         holder.txtText2.setText(tweet.getText());
-        Uri video = Uri.parse(tweet.getVideoTweet().getUrl());
-        holder.vdTweet.setVideoURI(video);
-        holder.vdTweet.start();
+        if (linkVideo(tweet).size()!=0){
+            Uri video = Uri.parse(linkVideo(tweet).get(0));
+            holder.vdTweet.setVideoURI(video);
+            holder.vdTweet.start();
+        }else {
+            holder.vdTweet.setVisibility(View.GONE);
+        }
     }
 
-    private void bindViewTweetImage(ItemTweetImage holder, TimelineTweet tweet) {
+    private List<String> linkVideo(TimeLine tweet) {
+        List<String> url = new ArrayList<>();
+        for (Variants n: tweet.getExtended_entities().getMedia().get(0).getVideo_info().getVariants()){
+            if(n.getBitrate()>0){
+                url.add(n.getUrl());
+            }
+        }
+        return url;
+    }
+
+    private void bindViewTweetImage(ItemTweetImage holder, TimeLine tweet) {
         Glide.with(context)
-                .load(tweet.getUserTwee().getProfile_image_url())
+                .load(tweet.getUser().getProfile_image_url())
                 .into(holder.imageAvatar1);
-        holder.txtUserName1.setText(tweet.getUserTwee().getName());
-        holder.txtRealName1.setText("@"+tweet.getUserTwee().getScreen_name());
+        holder.txtUserName1.setText(tweet.getUser().getName());
+        holder.txtRealName1.setText("@"+tweet.getUser().getScreen_name());
         holder.txtTimeStamp1.setText(getRelativeTimeAgo(tweet.getCreated_at()));
         holder.txtText1.setText(tweet.getText());
         Glide.with(context)
-                .load(tweet.getMedia_url())
+                .load(tweet.getExtended_entities().getMedia().get(0).getMedia_url())
                 .into(holder.imgTweet);
     }
 
-    private void bindViewTweet(ItemTweet holder, TimelineTweet tweet) {
+    private void bindViewTweet(ItemTweet holder, TimeLine tweet) {
         Glide.with(context)
-                .load(tweet.getUserTwee().getProfile_image_url())
+                .load(tweet.getUser().getProfile_image_url())
                 .into(holder.imageAvatar0);
-        holder.txtUserName0.setText(tweet.getUserTwee().getName());
-        holder.txtRealName0.setText("@"+tweet.getUserTwee().getScreen_name());
+        holder.txtUserName0.setText(tweet.getUser().getName());
+        holder.txtRealName0.setText("@"+tweet.getUser().getScreen_name());
         holder.txtTimeStamp0.setText(getRelativeTimeAgo(tweet.getCreated_at()));
         holder.txtText0.setText(tweet.getText());
     }
@@ -150,7 +162,7 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return relativeDate;
     }
 
-    public void appendData(List<TimelineTweet> timelineTweets){
+    public void appendData(List<TimeLine> timelineTweets){
         int nextPos = data.size();
         this.data.addAll(nextPos, timelineTweets);
         notifyDataSetChanged();

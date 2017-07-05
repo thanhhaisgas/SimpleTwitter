@@ -66,10 +66,10 @@ public class HomeFragment extends Fragment {
 
     public void fetchData() {
         RestClient client = RestApplication.getRestClient();
-        client.getHomeTimeline(page, new JsonHttpResponseHandler() {
+        client.getHomeTimeline(1, new JsonHttpResponseHandler() {
             public void onSuccess(int statusCode, Header[] headers, JSONArray jsonArray) {
                 FetchTweet fetchTweet = new FetchTweet(jsonArray);
-                tweetAdapter = new TweetAdapter(fetchTweet.getTimeline(), rootView.getContext());
+                tweetAdapter = new TweetAdapter(fetchTweet.getTimelines(), rootView.getContext());
                 lvTweet.setAdapter(tweetAdapter);
                 LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
                 lvTweet.setLayoutManager(layoutManager);
@@ -86,9 +86,10 @@ public class HomeFragment extends Fragment {
             client.getHomeTimeline(page, new JsonHttpResponseHandler() {
                 public void onSuccess(int statusCode, Header[] headers, JSONArray jsonArray) {
                     FetchTweet fetchTweet = new FetchTweet(jsonArray);
-                    tweetAdapter.appendData(fetchTweet.getTimeline());
+                    tweetAdapter.appendData(fetchTweet.getTimelines());
                 }
             });
+
         }else {
             Toast.makeText(getActivity(),"Limit api",Toast.LENGTH_SHORT).show();
         }

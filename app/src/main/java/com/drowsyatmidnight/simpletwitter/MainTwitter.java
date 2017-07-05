@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.drowsyatmidnight.adapter.TabsPagerAdapter;
@@ -76,6 +77,12 @@ public class MainTwitter extends AppCompatActivity{
                 }
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Toast.makeText(this, "Pause", Toast.LENGTH_SHORT).show();
     }
 
     private void setUpView() {
