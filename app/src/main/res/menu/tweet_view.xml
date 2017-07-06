@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/group1">
+        <item
+            android:id="@+id/nav_Person"
+            android:title="@null"
+            app:actionLayout="@layout/item_profile"/>
+        <item
+            android:id="@+id/nav_List"
+            android:title="@null"
+            app:actionLayout="@layout/item_list" />
+        <item
+            android:id="@+id/nav_Moment"
+            android:title="@null"
+            app:actionLayout="@layout/item_moment"/>
+        <item
+            android:id="@+id/nav_Highlight"
+            android:title="@null"
+            app:actionLayout="@layout/item_highlight" />
+    </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/group2">
+        <item
+            android:id="@+id/nav_setting"
+            android:title="@null"
+            app:actionLayout="@layout/item_setting"/>
+        <item
+            android:id="@+id/nav_help"
+            android:title="@null"
+            app:actionLayout="@layout/item_help"/>
+        <item
+            android:id="@+id/nav_nigtmode"
+            android:title="@null"
+            app:actionLayout="@layout/item_night_mode"/>
+        <item
+            android:id="@+id/nav_QRcode"
+            android:title="@null"
+            app:actionLayout="@layout/item_qrcode"/>
+    </group>
+
+</menu>

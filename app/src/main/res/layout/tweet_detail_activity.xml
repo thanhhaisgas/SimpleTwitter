@@ -7,186 +7,192 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolBarDetail"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorToolbar"
-        app:titleTextColor="@android:color/white"
-        app:theme="@style/ToolbarColoredBackArrow">
-    </android.support.v7.widget.Toolbar>
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="10dp"
-        android:orientation="horizontal">
-        <android.support.v7.widget.CardView
-            android:id="@+id/view2"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
-            android:layout_centerHorizontal="true"
-            android:innerRadius="0dp"
-            android:shape="ring"
-            android:thicknessRatio="1.6"
-            app:cardCornerRadius="35dp">
-
-            <ImageView
-                android:id="@+id/imgAvatarDetail"
-                android:layout_width="match_parent"
-                android:layout_height="65dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:scaleType="fitXY"/>
-        </android.support.v7.widget.CardView>
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolBarDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorToolbar"
+            app:titleTextColor="@android:color/white"
+            app:theme="@style/ToolbarColoredBackArrow">
+        </android.support.v7.widget.Toolbar>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/txtUserNameDetail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                android:textStyle="bold"
-                android:textSize="20dp"
-                tool:text="Hai Nguyen" />
-
-            <TextView
-                android:id="@+id/txtRealNameDetail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18dp"
-                android:textColor="@color/gray"
-                tool:text="d@HaiNguyen" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/txtTextDetail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="10dp"
-        android:textSize="22dp"
-        android:autoLink="web"
-        android:textColor="@android:color/white"
-        android:textColorLink="#1E88E5"
-        tool:text="Linh ta linh tinh" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="15dp"
             android:layout_marginRight="10dp"
-            android:orientation="vertical">
+            android:orientation="horizontal">
+            <android.support.v7.widget.CardView
+                android:id="@+id/view2"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_centerHorizontal="true"
+                android:innerRadius="0dp"
+                android:shape="ring"
+                android:thicknessRatio="1.6"
+                app:cardCornerRadius="35dp">
 
-            <VideoView
-                android:id="@+id/vdTweetDetail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="7dp" />
-
-            <ImageView
-                android:id="@+id/imgTweetDetail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                android:scaleType="fitXY" />
-
-            <TextView
-                android:id="@+id/txtTimeStampDetail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:textSize="18dp"
-                android:textColor="@color/gray"
-                tool:text="1h" />
+                <ImageView
+                    android:id="@+id/imgAvatarDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="65dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:scaleType="fitXY"/>
+            </android.support.v7.widget.CardView>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:orientation="horizontal">
+                android:layout_marginLeft="10dp"
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/txtReTweetDetail"
+                    android:id="@+id/txtUserNameDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    tool:text="Hai Nguyen" />
+
+                <TextView
+                    android:id="@+id/txtRealNameDetail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="18dp"
-                    android:layout_marginLeft="5dp"
                     android:textColor="@color/gray"
-                    tool:text="142 Retweets" />
+                    tool:text="d@HaiNguyen" />
 
-                <TextView
-                    android:id="@+id/txtFavouriteDetail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="18dp"
-                    android:layout_marginLeft="5dp"
-                    android:textColor="@color/gray"
-                    tool:text="142 Likes" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:weightSum="4">
-
-                <ImageView
-                    android:id="@+id/img_ic_reply_detail"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_reply" />
-
-                <ImageView
-                    android:id="@+id/img_ic_retweet_detail"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_retweet" />
-
-                <ImageView
-                    android:id="@+id/img_ic_favourite_detail"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_heart" />
-
-                <ImageView
-                    android:id="@+id/img_ic_message_detail"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_message" />
             </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/txtTextDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="10dp"
+            android:textSize="22dp"
+            android:autoLink="web"
+            android:textColor="@android:color/white"
+            android:textColorLink="#1E88E5"
+            tool:text="Linh ta linh tinh" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:orientation="vertical">
+
+                <VideoView
+                    android:id="@+id/vdTweetDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp" />
+
+                <ImageView
+                    android:id="@+id/imgTweetDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:scaleType="fitXY" />
+
+                <TextView
+                    android:id="@+id/txtTimeStampDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:textSize="18dp"
+                    android:textColor="@color/gray"
+                    tool:text="1h" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/txtReTweetDetail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18dp"
+                        android:layout_marginLeft="5dp"
+                        android:textColor="@color/gray"
+                        tool:text="142 Retweets" />
+
+                    <TextView
+                        android:id="@+id/txtFavouriteDetail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18dp"
+                        android:layout_marginLeft="5dp"
+                        android:textColor="@color/gray"
+                        tool:text="142 Likes" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <ImageView
+                        android:id="@+id/img_ic_reply_detail"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_reply" />
+
+                    <ImageView
+                        android:id="@+id/img_ic_retweet_detail"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_retweet" />
+
+                    <ImageView
+                        android:id="@+id/img_ic_favourite_detail"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_heart" />
+
+                    <ImageView
+                        android:id="@+id/img_ic_message_detail"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_message" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

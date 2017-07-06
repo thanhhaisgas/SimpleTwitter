@@ -2,13 +2,17 @@ package com.drowsyatmidnight.simpletwitter;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.drowsyatmidnight.adapter.TabsPagerAdapter;
@@ -38,6 +42,10 @@ public class MainTwitter extends AppCompatActivity{
     FloatingActionButton fabNewTweet;
     @BindView(R.id.imgAvatarProfile)
     ImageView imgAvatarProfile;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawer_layout;
+    private ImageView imgNavHeader;
+    private TextView txtUserNameHeader, txtRealNameHeader;
     private TabsPagerAdapter adapter;
     private static final int[] tabIconsSelected = {
             R.drawable.homew,
@@ -52,14 +60,13 @@ public class MainTwitter extends AppCompatActivity{
             R.drawable.messageg,
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_twitter);
         ButterKnife.bind(this);
-        getProfile();
         setUpView();
+        getProfile();
     }
 
     private void getProfile(){
@@ -68,9 +75,16 @@ public class MainTwitter extends AppCompatActivity{
             public void onSuccess(int statusCode, Header[] headers, JSONObject jsonObject) {
                 try {
                     String urlImage = jsonObject.getString("profile_image_url");
+                    String name = jsonObject.getString("name");
+                    String screen_name = jsonObject.getString("screen_name");
                     Glide.with(MainTwitter.this)
                             .load(urlImage)
                             .into(imgAvatarProfile);
+                    Glide.with(MainTwitter.this)
+                            .load(urlImage)
+                            .into(imgNavHeader);
+                    txtUserNameHeader.setText(name);
+                    txtRealNameHeader.setText("@"+screen_name);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -95,6 +109,12 @@ public class MainTwitter extends AppCompatActivity{
             transaction.add(android.R.id.content, newFragment).addToBackStack(null).commit();
             adapter.getItem(0).getId();
         });
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nvView);
+        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header);
+        imgNavHeader = (ImageView) headerLayout.findViewById(R.id.imgNavHeader);
+        txtUserNameHeader = (TextView) headerLayout.findViewById(R.id.txtUserNameHeader);
+        txtRealNameHeader = (TextView) headerLayout.findViewById(R.id.txtRealNameHeader);
     }
 
     private void setupTabIcons() {
