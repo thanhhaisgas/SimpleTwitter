@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.drowsyatmidnight.simpletwitter">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.drowsyatmidnight.login.LoginActivity"
+        <activity
+            android:name="com.drowsyatmidnight.login.LoginActivity"
             android:theme="@style/AppThemeNoAcTionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,7 +31,10 @@
                     android:scheme="@string/intent_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainTwitter"
+        <activity
+            android:name=".MainTwitter"
+            android:theme="@style/AppThemeNoAcTionBar" />
+        <activity android:name=".TweetDetail"
             android:theme="@style/AppThemeNoAcTionBar"></activity>
     </application>
 
