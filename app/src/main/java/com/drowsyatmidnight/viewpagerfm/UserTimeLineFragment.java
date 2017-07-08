@@ -28,7 +28,7 @@ import cz.msebera.android.httpclient.Header;
  * Created by haint on 01/07/2017.
  */
 
-public class HomeFragment extends Fragment {
+public class UserTimeLineFragment extends Fragment {
     @BindView(R.id.lvTweet)
     RecyclerView lvTweet;
     @BindView(R.id.swipeToRefresh)
@@ -38,11 +38,31 @@ public class HomeFragment extends Fragment {
     private int page = 0;
     private View rootView;
 
+    private String id;
+    private String realname;
+
+    public static UserTimeLineFragment newInstance(String id, String realName){
+        UserTimeLineFragment f = new UserTimeLineFragment();
+        Bundle args = new Bundle();
+        args.putString("id", id);
+        args.putString("realName", realName);
+        f.setArguments(args);
+        return f;
+    }
+
+    private void readBundle(Bundle bundle) {
+        if (bundle != null) {
+            id = bundle.getString("id");
+            realname = bundle.getString("realName");
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.homefm, container, false);
         ButterKnife.bind(this, rootView);
+        readBundle(getArguments());
         return rootView;
     }
 
@@ -65,7 +85,7 @@ public class HomeFragment extends Fragment {
 
     public void fetchData() {
         RestClient client = RestApplication.getRestClient();
-        client.getHomeTimeline(0, new JsonHttpResponseHandler() {
+        client.getUserTimeline(0, id, realname, new JsonHttpResponseHandler() {
             public void onSuccess(int statusCode, Header[] headers, JSONArray jsonArray) {
                 FetchTweet fetchTweet = new FetchTweet(jsonArray);
                 tweetAdapter = new TweetAdapter(fetchTweet.getTimelines(), rootView.getContext());
@@ -81,7 +101,7 @@ public class HomeFragment extends Fragment {
     private void loadTweetMore() {
         page+=1;
         RestClient client = RestApplication.getRestClient();
-        client.getHomeTimeline(page, new JsonHttpResponseHandler() {
+        client.getUserTimeline(page, id, realname, new JsonHttpResponseHandler() {
             public void onSuccess(int statusCode, Header[] headers, JSONArray jsonArray) {
                 if(jsonArray == null){
                     Toast.makeText(getActivity(),"Limit api",Toast.LENGTH_SHORT).show();

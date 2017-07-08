@@ -1,5 +1,7 @@
 package com.drowsyatmidnight.simpletwitter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -10,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,8 +27,12 @@ import com.drowsyatmidnight.viewpagerfm.NotificationFragment;
 import com.drowsyatmidnight.viewpagerfm.SearchFragment;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,6 +67,8 @@ public class MainTwitter extends AppCompatActivity{
             R.drawable.messageg,
     };
 
+    public static String test = "aloha";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +99,19 @@ public class MainTwitter extends AppCompatActivity{
                 }
             }
         });
+        client.getMention(0, new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                super.onSuccess(statusCode, headers, response);
+                Log.d("mention", response.toString());
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                Log.d("fail", throwable.toString());
+            }
+        });
     }
 
     private void setUpView() {
@@ -115,6 +137,9 @@ public class MainTwitter extends AppCompatActivity{
         imgNavHeader = (ImageView) headerLayout.findViewById(R.id.imgNavHeader);
         txtUserNameHeader = (TextView) headerLayout.findViewById(R.id.txtUserNameHeader);
         txtRealNameHeader = (TextView) headerLayout.findViewById(R.id.txtRealNameHeader);
+        imgNavHeader.setOnClickListener(v -> {
+            goProfile(MainTwitter.this);
+        });
     }
 
     private void setupTabIcons() {
@@ -154,6 +179,33 @@ public class MainTwitter extends AppCompatActivity{
         adapter.addFragment(new NotificationFragment());
         adapter.addFragment(new MessageFragment());
         viewPager.setAdapter(adapter);
+    }
+
+    private void goProfile(Context context){
+        RestClient client = RestApplication.getRestClient();
+        client.getProfile(0, new JsonHttpResponseHandler() {
+            public void onSuccess(int statusCode, Header[] headers, JSONObject jsonObject) {
+                try {
+                    Log.d("profile", jsonObject.toString());
+                    List<String> data = new ArrayList<>();
+                    data.add(jsonObject.getString("id_str"));
+                    data.add(jsonObject.getString("name"));
+                    data.add(jsonObject.getString("screen_name"));
+                    data.add(jsonObject.getString("location"));
+                    data.add(jsonObject.getString("description"));
+                    data.add(String.valueOf(jsonObject.getLong("followers_count")));
+                    data.add(String.valueOf(jsonObject.getLong("friends_count")));
+                    data.add(jsonObject.getString("profile_background_image_url"));
+                    data.add(jsonObject.getString("profile_image_url"));
+                    Intent goProfile = new Intent(context, ProfileActivity.class);
+                    goProfile.putStringArrayListExtra("data", (ArrayList<String>) data);
+                    context.startActivity(goProfile);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
 }

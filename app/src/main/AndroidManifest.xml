@@ -34,7 +34,13 @@
         <activity
             android:name=".MainTwitter"
             android:theme="@style/AppThemeNoAcTionBar" />
-        <activity android:name=".TweetDetail"
+        <activity
+            android:name=".TweetDetail"
+            android:theme="@style/AppThemeNoAcTionBar" />
+        <activity
+            android:name=".ProfileActivity"
+            android:theme="@style/AppThemeNoAcTionBar" />
+        <activity android:name=".FollowingActivity"
             android:theme="@style/AppThemeNoAcTionBar"></activity>
     </application>
 

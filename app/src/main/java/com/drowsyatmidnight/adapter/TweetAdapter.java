@@ -15,6 +15,7 @@ import com.drowsyatmidnight.holder.ItemTweetImage;
 import com.drowsyatmidnight.holder.ItemTweetVideo;
 import com.drowsyatmidnight.model.TimeLine;
 import com.drowsyatmidnight.model.Variants;
+import com.drowsyatmidnight.simpletwitter.ProfileActivity;
 import com.drowsyatmidnight.simpletwitter.R;
 import com.drowsyatmidnight.simpletwitter.TweetDetail;
 
@@ -127,6 +128,10 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         holder.layoutTweetVideo.setOnClickListener(v -> goDetail(tweetData(tweet.getUser().getProfile_image_url(), tweet.getUser().getName(), "@"+tweet.getUser().getScreen_name(),
                 tweet.getText(), null, linkVideo(tweet).get(0), tweet.getCreated_at(), String.valueOf(tweet.getRetweet_count()), String.valueOf(tweet.getFavorite_count()))
                 ,false,2));
+        holder.imageAvatar2.setOnClickListener(v -> goProfile(tweet.getUser().getId_str(), tweet.getUser().getName(), tweet.getUser().getScreen_name(),
+                tweet.getUser().getLocation(), tweet.getUser().getDescription(), tweet.getUser().getFollowers_count(),
+                tweet.getUser().getFriends_count(),tweet.getUser().getProfile_background_image_url(),tweet.getUser().getProfile_image_url(),
+                context));
     }
 
     private List<String> linkVideo(TimeLine tweet) {
@@ -161,6 +166,10 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         holder.layoutTweetImage.setOnClickListener(v -> goDetail(tweetData(tweet.getUser().getProfile_image_url(), tweet.getUser().getName(), "@"+tweet.getUser().getScreen_name(),
                 tweet.getText(), tweet.getExtended_entities().getMedia().get(0).getMedia_url(), null, tweet.getCreated_at(), String.valueOf(tweet.getRetweet_count()), String.valueOf(tweet.getFavorite_count()))
                 ,false,1));
+        holder.imageAvatar1.setOnClickListener(v -> goProfile(tweet.getUser().getId_str(), tweet.getUser().getName(), tweet.getUser().getScreen_name(),
+                tweet.getUser().getLocation(), tweet.getUser().getDescription(), tweet.getUser().getFollowers_count(),
+                tweet.getUser().getFriends_count(),tweet.getUser().getProfile_background_image_url(),tweet.getUser().getProfile_image_url(),
+                context));
     }
 
     private void bindViewTweet(ItemTweet holder, TimeLine tweet) {
@@ -182,6 +191,10 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         holder.layoutTweet.setOnClickListener(v -> goDetail(tweetData(tweet.getUser().getProfile_image_url(), tweet.getUser().getName(), "@"+tweet.getUser().getScreen_name(),
                 tweet.getText(), null, null, tweet.getCreated_at(), String.valueOf(tweet.getRetweet_count()), String.valueOf(tweet.getFavorite_count()))
                 ,false,0));
+        holder.imageAvatar0.setOnClickListener(v -> goProfile(tweet.getUser().getId_str(), tweet.getUser().getName(), tweet.getUser().getScreen_name(),
+                tweet.getUser().getLocation(), tweet.getUser().getDescription(), tweet.getUser().getFollowers_count(),
+                tweet.getUser().getFriends_count(),tweet.getUser().getProfile_background_image_url(),tweet.getUser().getProfile_image_url(),
+                context));
     }
 
     @Override
@@ -234,6 +247,25 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         data.add(txtReTweetDetail);
         data.add(txtFavouriteDetail);
         return data;
+    }
+
+
+    private void goProfile(String id_str, String name, String screen_name,
+                                   String location, String description, long followers_count,
+                                   long friends_count, String profile_background_image_url, String profile_image_url, Context context){
+        List<String> data = new ArrayList<>();
+        data.add(id_str);
+        data.add(name);
+        data.add(screen_name);
+        data.add(location);
+        data.add(description);
+        data.add(String.valueOf(followers_count));
+        data.add(String.valueOf(friends_count));
+        data.add(profile_background_image_url);
+        data.add(profile_image_url);
+        Intent goProfile = new Intent(context, ProfileActivity.class);
+        goProfile.putStringArrayListExtra("data", (ArrayList<String>) data);
+        context.startActivity(goProfile);
     }
 
     private void goDetail(List<String> data, boolean reply, int viewType){

@@ -46,10 +46,44 @@ public class RestClient extends OAuthBaseClient{
         getClient().get(apiUrl, params, handler);
     }
 
+    public void getUserTimeline(int page, String id, String realName, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("statuses/user_timeline.json");
+        RequestParams params = new RequestParams();
+        params.put("page", String.valueOf(page));
+        params.put("user_id", id);
+        params.put("screen_name", realName);
+        getClient().get(apiUrl, params, handler);
+    }
+
+    public void getMention(int page, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("statuses/mentions_timeline.json");
+        RequestParams params = new RequestParams();
+        params.put("page", String.valueOf(page));
+        getClient().get(apiUrl, params, handler);
+    }
+
     public void getProfile(int page, AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("account/verify_credentials.json");
         RequestParams params = new RequestParams();
         params.put("page", String.valueOf(page));
+        getClient().get(apiUrl, params, handler);
+    }
+
+    public void getFollowing(int page, String realName, String id, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("friends/list.json");
+        RequestParams params = new RequestParams();
+        params.put("page", String.valueOf(page));
+        params.put("screen_name", realName);
+        params.put("user_id", id);
+        getClient().get(apiUrl, params, handler);
+    }
+
+    public void getFollower(int page, String realName, String id, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("followers/list.json");
+        RequestParams params = new RequestParams();
+        params.put("page", String.valueOf(page));
+        params.put("screen_name", realName);
+        params.put("user_id", id);
         getClient().get(apiUrl, params, handler);
     }
 }
