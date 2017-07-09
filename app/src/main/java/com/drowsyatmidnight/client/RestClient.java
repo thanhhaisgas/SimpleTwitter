@@ -86,4 +86,45 @@ public class RestClient extends OAuthBaseClient{
         params.put("user_id", id);
         getClient().get(apiUrl, params, handler);
     }
+
+    public void postReply(String body, String in_reply_to_status_id, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("statuses/update.json");
+        RequestParams params = new RequestParams();
+        params.put("status", body);
+        params.put("in_reply_to_status_id", in_reply_to_status_id);
+        getClient().post(apiUrl, params, handler);
+    }
+
+    public void postRetweet(String id, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("statuses/retweet/");
+        RequestParams params = new RequestParams();
+        getClient().post(apiUrl+id+".json", params, handler);
+    }
+
+    public void postFavourite(String id, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("favorites/create.json");
+        RequestParams params = new RequestParams();
+        params.put("id", id);
+        getClient().post(apiUrl, params, handler);
+    }
+
+    public void postRetweetDestroy(String id, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("statuses/destroy/");
+        RequestParams params = new RequestParams();
+        getClient().post(apiUrl+id+".json", params, handler);
+    }
+
+    public void postFavouriteDestroy(String id, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("favorites/destroy.json");
+        RequestParams params = new RequestParams();
+        params.put("id", id);
+        getClient().post(apiUrl, params, handler);
+    }
+
+    public void getSearchResult(String q, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("search/tweets.json");
+        RequestParams params = new RequestParams();
+        params.put("q", q);
+        getClient().get(apiUrl, params, handler);
+    }
 }

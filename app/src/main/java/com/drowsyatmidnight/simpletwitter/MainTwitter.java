@@ -8,14 +8,19 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.drowsyatmidnight.adapter.TabsPagerAdapter;
@@ -68,6 +73,7 @@ public class MainTwitter extends AppCompatActivity{
     };
 
     public static String test = "aloha";
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +82,36 @@ public class MainTwitter extends AppCompatActivity{
         ButterKnife.bind(this);
         setUpView();
         getProfile();
+        addControls();
+    }
+
+    private void addControls() {
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if(position==1){
+                    Toast.makeText(MainTwitter.this,"search",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.tweet_searching, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
+        return super.onCreateOptionsMenu(menu);
     }
 
     private void getProfile(){

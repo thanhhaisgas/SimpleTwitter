@@ -8,8 +8,13 @@ import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.drowsyatmidnight.client.RestApplication;
+import com.drowsyatmidnight.client.RestClient;
 import com.drowsyatmidnight.holder.ItemTweet;
 import com.drowsyatmidnight.holder.ItemTweetImage;
 import com.drowsyatmidnight.holder.ItemTweetVideo;
@@ -18,12 +23,18 @@ import com.drowsyatmidnight.model.Variants;
 import com.drowsyatmidnight.simpletwitter.ProfileActivity;
 import com.drowsyatmidnight.simpletwitter.R;
 import com.drowsyatmidnight.simpletwitter.TweetDetail;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by haint on 01/07/2017.
@@ -119,19 +130,41 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
         holder.txtCpuntReply2.setText(withSuffix(tweet.getRetweet_count()));
         holder.txtCountFavourit2.setText(withSuffix(tweet.getFavorite_count()));
+        if(tweet.isFavorited()){
+            holder.img_ic_favourite2.setImageResource(R.drawable.ic_heart_selected);
+        }
+        if(tweet.isRetweeted()){
+            holder.img_ic_retweet2.setImageResource(R.drawable.ic_retweet_selected);
+        }
         holder.img_ic_reply2.setOnClickListener(v -> goDetail(tweetData(tweet.getUser().getProfile_image_url(), tweet.getUser().getName(), "@"+tweet.getUser().getScreen_name(),
-                tweet.getText(), null, linkVideo(tweet).get(0), tweet.getCreated_at(), String.valueOf(tweet.getRetweet_count()), String.valueOf(tweet.getFavorite_count()))
+                tweet.getText(), null, linkVideo(tweet).get(0), tweet.getCreated_at(), String.valueOf(tweet.getRetweet_count()), String.valueOf(tweet.getFavorite_count()), String.valueOf(tweet.getId()))
                 ,true,2));
         holder.txtText2.setOnClickListener(v -> goDetail(tweetData(tweet.getUser().getProfile_image_url(), tweet.getUser().getName(), "@"+tweet.getUser().getScreen_name(),
-                tweet.getText(), null, linkVideo(tweet).get(0), tweet.getCreated_at(), String.valueOf(tweet.getRetweet_count()), String.valueOf(tweet.getFavorite_count()))
+                tweet.getText(), null, linkVideo(tweet).get(0), tweet.getCreated_at(), String.valueOf(tweet.getRetweet_count()), String.valueOf(tweet.getFavorite_count()), String.valueOf(tweet.getId()))
                 ,false,2));
         holder.layoutTweetVideo.setOnClickListener(v -> goDetail(tweetData(tweet.getUser().getProfile_image_url(), tweet.getUser().getName(), "@"+tweet.getUser().getScreen_name(),
-                tweet.getText(), null, linkVideo(tweet).get(0), tweet.getCreated_at(), String.valueOf(tweet.getRetweet_count()), String.valueOf(tweet.getFavorite_count()))
+                tweet.getText(), null, linkVideo(tweet).get(0), tweet.getCreated_at(), String.valueOf(tweet.getRetweet_count()), String.valueOf(tweet.getFavorite_count()), String.valueOf(tweet.getId()))
                 ,false,2));
         holder.imageAvatar2.setOnClickListener(v -> goProfile(tweet.getUser().getId_str(), tweet.getUser().getName(), tweet.getUser().getScreen_name(),
                 tweet.getUser().getLocation(), tweet.getUser().getDescription(), tweet.getUser().getFollowers_count(),
                 tweet.getUser().getFriends_count(),tweet.getUser().getProfile_background_image_url(),tweet.getUser().getProfile_image_url(),
                 context));
+        holder.img_ic_retweet2.setOnClickListener(v -> {
+            if(holder.img_ic_retweet2.getDrawable().getConstantState().equals
+                    (context.getResources().getDrawable(R.drawable.ic_retweet).getConstantState())){
+                postRetweet(String.valueOf(tweet.getId()), holder.img_ic_retweet2, holder.txtCpuntReply2);
+            }else {
+                postRetweetDestroy(String.valueOf(tweet.getId()), holder.img_ic_retweet2, holder.txtCpuntReply2);
+            }
+        });
+        holder.img_ic_favourite2.setOnClickListener(v -> {
+            if(holder.img_ic_favourite2.getDrawable().getConstantState().equals
+                    (context.getResources().getDrawable(R.drawable.ic_heart).getConstantState())){
+                postFavourite(String.valueOf(tweet.getId()), holder.img_ic_favourite2, holder.txtCountFavourit2);
+            }else {
+                postFavouriteDestroy(String.valueOf(tweet.getId()), holder.img_ic_favourite2, holder.txtCountFavourit2);
+            }
+        });
     }
 
     private List<String> linkVideo(TimeLine tweet) {
@@ -157,19 +190,41 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 .into(holder.imgTweet);
         holder.txtCpuntReply1.setText(withSuffix(tweet.getRetweet_count()));
         holder.txtCountFavourit1.setText(withSuffix(tweet.getFavorite_count()));
+        if(tweet.isFavorited()){
+            holder.img_ic_favourite1.setImageResource(R.drawable.ic_heart_selected);
+        }
+        if(tweet.isRetweeted()){
+            holder.img_ic_retweet1.setImageResource(R.drawable.ic_retweet_selected);
+        }
         holder.img_ic_reply1.setOnClickListener(v -> goDetail(tweetData(tweet.getUser().getProfile_image_url(), tweet.getUser().getName(), "@"+tweet.getUser().getScreen_name(),
-                tweet.getText(), tweet.getExtended_entities().getMedia().get(0).getMedia_url(), null, tweet.getCreated_at(), String.valueOf(tweet.getRetweet_count()), String.valueOf(tweet.getFavorite_count()))
+                tweet.getText(), tweet.getExtended_entities().getMedia().get(0).getMedia_url(), null, tweet.getCreated_at(), String.valueOf(tweet.getRetweet_count()), String.valueOf(tweet.getFavorite_count()), String.valueOf(tweet.getId()))
                 ,true,1));
         holder.txtText1.setOnClickListener(v -> goDetail(tweetData(tweet.getUser().getProfile_image_url(), tweet.getUser().getName(), "@"+tweet.getUser().getScreen_name(),
-                tweet.getText(), tweet.getExtended_entities().getMedia().get(0).getMedia_url(), null, tweet.getCreated_at(), String.valueOf(tweet.getRetweet_count()), String.valueOf(tweet.getFavorite_count()))
+                tweet.getText(), tweet.getExtended_entities().getMedia().get(0).getMedia_url(), null, tweet.getCreated_at(), String.valueOf(tweet.getRetweet_count()), String.valueOf(tweet.getFavorite_count()), String.valueOf(tweet.getId()))
                 ,false,1));
         holder.layoutTweetImage.setOnClickListener(v -> goDetail(tweetData(tweet.getUser().getProfile_image_url(), tweet.getUser().getName(), "@"+tweet.getUser().getScreen_name(),
-                tweet.getText(), tweet.getExtended_entities().getMedia().get(0).getMedia_url(), null, tweet.getCreated_at(), String.valueOf(tweet.getRetweet_count()), String.valueOf(tweet.getFavorite_count()))
+                tweet.getText(), tweet.getExtended_entities().getMedia().get(0).getMedia_url(), null, tweet.getCreated_at(), String.valueOf(tweet.getRetweet_count()), String.valueOf(tweet.getFavorite_count()), String.valueOf(tweet.getId()))
                 ,false,1));
         holder.imageAvatar1.setOnClickListener(v -> goProfile(tweet.getUser().getId_str(), tweet.getUser().getName(), tweet.getUser().getScreen_name(),
                 tweet.getUser().getLocation(), tweet.getUser().getDescription(), tweet.getUser().getFollowers_count(),
                 tweet.getUser().getFriends_count(),tweet.getUser().getProfile_background_image_url(),tweet.getUser().getProfile_image_url(),
                 context));
+        holder.img_ic_retweet1.setOnClickListener(v -> {
+            if(holder.img_ic_retweet1.getDrawable().getConstantState().equals
+                    (context.getResources().getDrawable(R.drawable.ic_retweet).getConstantState())){
+                postRetweet(String.valueOf(tweet.getId()), holder.img_ic_retweet1, holder.txtCpuntReply1);
+            }else {
+                postRetweetDestroy(String.valueOf(tweet.getId()), holder.img_ic_retweet1, holder.txtCpuntReply1);
+            }
+        });
+        holder.img_ic_favourite1.setOnClickListener(v -> {
+            if(holder.img_ic_favourite1.getDrawable().getConstantState().equals
+                    (context.getResources().getDrawable(R.drawable.ic_heart).getConstantState())){
+                postFavourite(String.valueOf(tweet.getId()), holder.img_ic_favourite1, holder.txtCountFavourit1);
+            }else {
+                postFavouriteDestroy(String.valueOf(tweet.getId()), holder.img_ic_favourite1, holder.txtCountFavourit1);
+            }
+        });
     }
 
     private void bindViewTweet(ItemTweet holder, TimeLine tweet) {
@@ -182,19 +237,41 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         holder.txtText0.setText(tweet.getText());
         holder.txtCpuntReply0.setText(withSuffix(tweet.getRetweet_count()));
         holder.txtCountFavourit0.setText(withSuffix(tweet.getFavorite_count()));
+        if(tweet.isFavorited()){
+            holder.img_ic_favourite0.setImageResource(R.drawable.ic_heart_selected);
+        }
+        if(tweet.isRetweeted()){
+            holder.img_ic_retweet0.setImageResource(R.drawable.ic_retweet_selected);
+        }
         holder.img_ic_reply0.setOnClickListener(v -> goDetail(tweetData(tweet.getUser().getProfile_image_url(), tweet.getUser().getName(), "@"+tweet.getUser().getScreen_name(),
-                    tweet.getText(), null, null, tweet.getCreated_at(), String.valueOf(tweet.getRetweet_count()), String.valueOf(tweet.getFavorite_count()))
+                    tweet.getText(), null, null, tweet.getCreated_at(), String.valueOf(tweet.getRetweet_count()), String.valueOf(tweet.getFavorite_count()), String.valueOf(tweet.getId()))
                     ,true,0));
         holder.txtText0.setOnClickListener(v -> goDetail(tweetData(tweet.getUser().getProfile_image_url(), tweet.getUser().getName(), "@"+tweet.getUser().getScreen_name(),
-                tweet.getText(), null, null, tweet.getCreated_at(), String.valueOf(tweet.getRetweet_count()), String.valueOf(tweet.getFavorite_count()))
+                tweet.getText(), null, null, tweet.getCreated_at(), String.valueOf(tweet.getRetweet_count()), String.valueOf(tweet.getFavorite_count()), String.valueOf(tweet.getId()))
                 ,false,0));
         holder.layoutTweet.setOnClickListener(v -> goDetail(tweetData(tweet.getUser().getProfile_image_url(), tweet.getUser().getName(), "@"+tweet.getUser().getScreen_name(),
-                tweet.getText(), null, null, tweet.getCreated_at(), String.valueOf(tweet.getRetweet_count()), String.valueOf(tweet.getFavorite_count()))
+                tweet.getText(), null, null, tweet.getCreated_at(), String.valueOf(tweet.getRetweet_count()), String.valueOf(tweet.getFavorite_count()), String.valueOf(tweet.getId()))
                 ,false,0));
         holder.imageAvatar0.setOnClickListener(v -> goProfile(tweet.getUser().getId_str(), tweet.getUser().getName(), tweet.getUser().getScreen_name(),
                 tweet.getUser().getLocation(), tweet.getUser().getDescription(), tweet.getUser().getFollowers_count(),
                 tweet.getUser().getFriends_count(),tweet.getUser().getProfile_background_image_url(),tweet.getUser().getProfile_image_url(),
                 context));
+        holder.img_ic_retweet0.setOnClickListener(v -> {
+            if(holder.img_ic_retweet0.getDrawable().getConstantState().equals
+                    (context.getResources().getDrawable(R.drawable.ic_retweet).getConstantState())){
+                postRetweet(String.valueOf(tweet.getId()), holder.img_ic_retweet0, holder.txtCpuntReply0);
+            }else {
+                postRetweetDestroy(String.valueOf(tweet.getId()), holder.img_ic_retweet0, holder.txtCpuntReply0);
+            }
+        });
+        holder.img_ic_favourite0.setOnClickListener(v -> {
+            if(holder.img_ic_favourite0.getDrawable().getConstantState().equals
+                    (context.getResources().getDrawable(R.drawable.ic_heart).getConstantState())){
+                postFavourite(String.valueOf(tweet.getId()), holder.img_ic_favourite0, holder.txtCountFavourit0);
+            }else {
+                postFavouriteDestroy(String.valueOf(tweet.getId()), holder.img_ic_favourite0, holder.txtCountFavourit0);
+            }
+        });
     }
 
     @Override
@@ -227,7 +304,7 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private List<String> tweetData(String imgAvatarDetail, String txtUserNameDetail, String txtRealNameDetail,
                                    String txtTextDetail, String imgTweetDetail, String vdTweetDetail,
-                                   String txtTimeStampDetail, String txtReTweetDetail, String txtFavouriteDetail){
+                                   String txtTimeStampDetail, String txtReTweetDetail, String txtFavouriteDetail, String idTweet){
         List<String> data = new ArrayList<>();
         data.add(imgAvatarDetail);
         data.add(txtUserNameDetail);
@@ -246,6 +323,7 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         data.add(txtTimeStampDetail);
         data.add(txtReTweetDetail);
         data.add(txtFavouriteDetail);
+        data.add(idTweet);
         return data;
     }
 
@@ -274,5 +352,73 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         goTweetDeatil.putExtra("reply", reply);
         goTweetDeatil.putExtra("viewType", viewType);
         context.startActivity(goTweetDeatil);
+    }
+
+    private void postFavourite(String id, ImageView holder, TextView countFavourite){
+        RestClient client = RestApplication.getRestClient();
+        client.postFavourite(id, new JsonHttpResponseHandler(){
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                holder.setImageResource(R.drawable.ic_heart_selected);
+                countFavourite.setText(String.valueOf(Long.parseLong(countFavourite.getText().toString())+1));
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                Toast.makeText(context,"Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void postRetweet(String id, ImageView holder, TextView countRetweet){
+        RestClient client = RestApplication.getRestClient();
+        client.postRetweet(id, new JsonHttpResponseHandler(){
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                holder.setImageResource(R.drawable.ic_retweet_selected);
+                countRetweet.setText(String.valueOf(Long.parseLong(countRetweet.getText().toString())+1));
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                Toast.makeText(context,"Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void postFavouriteDestroy(String id, ImageView holder, TextView countFavourite){
+        RestClient client = RestApplication.getRestClient();
+        client.postFavouriteDestroy(id, new JsonHttpResponseHandler(){
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                holder.setImageResource(R.drawable.ic_heart);
+                countFavourite.setText(String.valueOf(Long.parseLong(countFavourite.getText().toString())-1));
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                Toast.makeText(context,"Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void postRetweetDestroy(String id, ImageView holder, TextView countRetweet){
+        RestClient client = RestApplication.getRestClient();
+        client.postRetweetDestroy(id, new JsonHttpResponseHandler(){
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                holder.setImageResource(R.drawable.ic_retweet);
+                countRetweet.setText(String.valueOf(Long.parseLong(countRetweet.getText().toString())-1));
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                Toast.makeText(context,"Error", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

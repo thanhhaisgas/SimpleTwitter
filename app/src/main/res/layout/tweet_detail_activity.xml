@@ -1,201 +1,311 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tool="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark">
+    android:background="@color/background">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/layoutDetail"
         android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolBarDetail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorToolbar"
-            app:titleTextColor="@android:color/white"
-            app:theme="@style/ToolbarColoredBackArrow">
+            android:background="@color/colorPrimaryDark">
         </android.support.v7.widget.Toolbar>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="10dp"
-            android:orientation="horizontal">
-            <android.support.v7.widget.CardView
-                android:id="@+id/view2"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
-                android:layout_centerHorizontal="true"
-                android:innerRadius="0dp"
-                android:shape="ring"
-                android:thicknessRatio="1.6"
-                app:cardCornerRadius="35dp">
-
-                <ImageView
-                    android:id="@+id/imgAvatarDetail"
-                    android:layout_width="match_parent"
-                    android:layout_height="65dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:scaleType="fitXY"/>
-            </android.support.v7.widget.CardView>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/txtUserNameDetail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
-                    android:textStyle="bold"
-                    android:textSize="20dp"
-                    tool:text="Hai Nguyen" />
-
-                <TextView
-                    android:id="@+id/txtRealNameDetail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="18dp"
-                    android:textColor="@color/gray"
-                    tool:text="d@HaiNguyen" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/txtTextDetail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="10dp"
-            android:textSize="22dp"
-            android:autoLink="web"
-            android:textColor="@android:color/white"
-            android:textColorLink="#1E88E5"
-            tool:text="Linh ta linh tinh" />
-
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
+            android:layout_marginBottom="?attr/actionBarSize"
+            android:layout_marginTop="10dp">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
-
-                <VideoView
-                    android:id="@+id/vdTweetDetail"
-                    android:layout_width="match_parent"
-                    android:layout_height="400dp"
-                    android:layout_marginTop="7dp" />
-
-                <ImageView
-                    android:id="@+id/imgTweetDetail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
-                    android:scaleType="fitXY" />
-
-                <TextView
-                    android:id="@+id/txtTimeStampDetail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="10dp"
-                    android:textSize="18dp"
-                    android:textColor="@color/gray"
-                    tool:text="1h" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="10dp"
                     android:orientation="horizontal">
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/view2"
+                        android:layout_width="65dp"
+                        android:layout_height="65dp"
+                        android:layout_centerHorizontal="true"
+                        android:innerRadius="0dp"
+                        android:shape="ring"
+                        android:thicknessRatio="1.6"
+                        app:cardCornerRadius="35dp">
 
-                    <TextView
-                        android:id="@+id/txtReTweetDetail"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="18dp"
-                        android:layout_marginLeft="5dp"
-                        android:textColor="@color/gray"
-                        tool:text="142 Retweets" />
+                        <ImageView
+                            android:id="@+id/imgAvatarDetail"
+                            android:layout_width="match_parent"
+                            android:layout_height="65dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerHorizontal="true"
+                            android:scaleType="fitXY"/>
+                    </android.support.v7.widget.CardView>
 
-                    <TextView
-                        android:id="@+id/txtFavouriteDetail"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="18dp"
-                        android:layout_marginLeft="5dp"
-                        android:textColor="@color/gray"
-                        tool:text="142 Likes" />
+                        android:layout_marginLeft="10dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/txtUserNameDetail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/white"
+                            android:textStyle="bold"
+                            android:textSize="20dp"
+                            tool:text="Hai Nguyen" />
+
+                        <TextView
+                            android:id="@+id/txtRealNameDetail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="18dp"
+                            android:textColor="@color/gray"
+                            tool:text="d@HaiNguyen" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/txtTextDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="10dp"
+                    android:textSize="22dp"
+                    android:autoLink="web"
+                    android:textColor="@android:color/white"
+                    android:textColorLink="#1E88E5"
+                    tool:text="Linh ta linh tinh" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:weightSum="4">
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/img_ic_reply_detail"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_reply" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/img_ic_retweet_detail"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_retweet" />
+                        <VideoView
+                            android:id="@+id/vdTweetDetail"
+                            android:layout_width="match_parent"
+                            android:layout_height="400dp"
+                            android:layout_marginTop="7dp" />
 
-                    <ImageView
-                        android:id="@+id/img_ic_favourite_detail"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_heart" />
+                        <ImageView
+                            android:id="@+id/imgTweetDetail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="7dp"
+                            android:scaleType="fitXY" />
 
-                    <ImageView
-                        android:id="@+id/img_ic_message_detail"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_message" />
+                        <TextView
+                            android:id="@+id/txtTimeStampDetail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="10dp"
+                            android:textSize="18dp"
+                            android:textColor="@color/gray"
+                            tool:text="1h" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/txtReTweetDetail"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="18dp"
+                                android:layout_marginLeft="5dp"
+                                android:textColor="@color/gray"
+                                tool:text="142 Retweets" />
+
+                            <TextView
+                                android:id="@+id/txtFavouriteDetail"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="18dp"
+                                android:layout_marginLeft="5dp"
+                                android:textColor="@color/gray"
+                                tool:text="142 Likes" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:weightSum="4">
+
+                            <ImageView
+                                android:id="@+id/img_ic_reply_detail"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_reply" />
+
+                            <ImageView
+                                android:id="@+id/img_ic_retweet_detail"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_retweet" />
+
+                            <ImageView
+                                android:id="@+id/img_ic_favourite_detail"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_heart" />
+
+                            <ImageView
+                                android:id="@+id/img_ic_message_detail"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_message" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
+        </ScrollView>
 
     </LinearLayout>
 
+    <FrameLayout
+        android:id="@+id/flReply"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_anchorGravity="bottom|right|end"
+        app:layout_anchor="@+id/layoutDetail"
+        android:background="@color/colorPrimaryDark">
+        <EditText
+            android:id="@+id/edReply"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:editable="false"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:focusable="false"
+            android:hint="Tweet your reply"
+            android:textColorHint="@android:color/darker_gray"
+            android:backgroundTint="@android:color/darker_gray"/>
+    </FrameLayout>
 
+    <FrameLayout
+        android:id="@+id/flDoReply"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_anchorGravity="bottom|right|end"
+        app:layout_anchor="@+id/layoutDetail"
+        android:background="@color/colorPrimaryDark">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
 
-</ScrollView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Replying to "
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="17dp" />
+
+                <TextView
+                    android:id="@+id/txtScreenNameReply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="17dp"
+                    tool:text="thanhhaisgas" />
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/edDialogReply"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:maxLines="5"
+                android:scrollbars="vertical"
+                android:hint="Tweet your reply"
+                android:textColorHint="@android:color/darker_gray"
+                android:textColor="@android:color/white"
+                android:backgroundTint="@color/colorAccent"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="5dp"
+                android:background="@color/colorPrimaryDark"
+                android:gravity="end">
+
+                <TextView
+                    android:id="@+id/txtAmountReply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:textColor="@color/gray"
+                    android:text="140"/>
+
+                <Button
+                    android:id="@+id/btnReply"
+                    android:layout_width="90dp"
+                    android:layout_height="40dp"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:text="Reply"
+                    android:textColor="@android:color/white"
+                    android:layout_marginRight="10dp"
+                    android:textSize="17dp"
+                    android:background="@drawable/reply_button"/>
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+</android.support.design.widget.CoordinatorLayout>
