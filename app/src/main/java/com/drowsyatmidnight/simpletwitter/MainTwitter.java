@@ -8,19 +8,18 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.drowsyatmidnight.adapter.TabsPagerAdapter;
@@ -48,8 +47,6 @@ public class MainTwitter extends AppCompatActivity{
     TabLayout taTwitter;
     @BindView(R.id.viewpager)
     ViewPager viewPager;
-    @BindView(R.id.toolBar)
-    Toolbar toolbar;
     @BindView(R.id.fabNewTweet)
     FloatingActionButton fabNewTweet;
     @BindView(R.id.imgAvatarProfile)
@@ -59,6 +56,9 @@ public class MainTwitter extends AppCompatActivity{
     private ImageView imgNavHeader;
     private TextView txtUserNameHeader, txtRealNameHeader;
     private TabsPagerAdapter adapter;
+    public static Toolbar toolbar;
+    public static CardView view2;
+    public static TextView titleTab;
     private static final int[] tabIconsSelected = {
             R.drawable.homew,
             R.drawable.searchw,
@@ -72,13 +72,15 @@ public class MainTwitter extends AppCompatActivity{
             R.drawable.messageg,
     };
 
-    public static String test = "aloha";
-    private SearchView searchView;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_twitter);
+        toolbar = (Toolbar) findViewById(R.id.toolBar);
+        view2 = (CardView) findViewById(R.id.view2);
+        titleTab = (TextView) findViewById(R.id.titleTab);
         ButterKnife.bind(this);
         setUpView();
         getProfile();
@@ -94,8 +96,28 @@ public class MainTwitter extends AppCompatActivity{
 
             @Override
             public void onPageSelected(int position) {
+                MenuItem itemSearch = menu.findItem(R.id.action_search);
+                if (position==0){
+                    titleTab.setText("Home");
+                }
                 if(position==1){
-                    Toast.makeText(MainTwitter.this,"search",Toast.LENGTH_SHORT).show();
+                    titleTab.setText("Search Twitter");
+                    itemSearch.setVisible(true);
+                    view2.setVisibility(View.GONE);
+                    titleTab.setVisibility(View.GONE);
+                }else {
+                    itemSearch.setVisible(false);
+                    view2.setVisibility(View.VISIBLE);
+                    titleTab.setVisibility(View.VISIBLE);
+                    toolbar.setNavigationIcon(null);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getWindow().getDecorView().getRootView().getWindowToken(), 0);
+                }
+                if (position==2){
+                    titleTab.setText("Mentions");
+                }
+                if (position==3){
+                    titleTab.setText("Messages");
                 }
             }
 
@@ -108,9 +130,8 @@ public class MainTwitter extends AppCompatActivity{
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.tweet_searching, menu);
-        MenuItem menuItem = menu.findItem(R.id.action_search);
-        searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
         return super.onCreateOptionsMenu(menu);
     }
 
