@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -25,8 +27,12 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,6 +78,7 @@ public class TweetDetail extends AppCompatActivity {
     private int viewType;
     private boolean reply;
     private List<String> data;
+    private int amountText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +86,11 @@ public class TweetDetail extends AppCompatActivity {
         setContentView(R.layout.tweet_detail_activity);
         ButterKnife.bind(this);
         getData();
-        setView();
+        try {
+            setView();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         addControls();
     }
 
@@ -91,28 +102,60 @@ public class TweetDetail extends AppCompatActivity {
         if(reply == true){
             edReply.performClick();
         }
-    }
+        edDialogReply.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-    private void doPostReply() {
-        RestClient client = RestApplication.getRestClient();
-        client.postReply(txtScreenNameReply.getText()+" "+edDialogReply.getText().toString(), data.get(9),new JsonHttpResponseHandler(){
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                super.onSuccess(statusCode, headers, response);
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getWindow().getDecorView().getRootView().getWindowToken(), 0);
-                Toast.makeText(TweetDetail.this, "Reply success", Toast.LENGTH_SHORT).show();
-                flReply.setVisibility(View.VISIBLE);
-                flDoReply.setVisibility(View.GONE);
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                Toast.makeText(TweetDetail.this,"Reply not success", Toast.LENGTH_SHORT).show();
-                flReply.setVisibility(View.VISIBLE);
-                flDoReply.setVisibility(View.GONE);
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                amountText = Integer.parseInt(txtAmountReply.getText().toString());
+                if (before<count){
+                    amountText -= 1;
+                    txtAmountReply.setText(String.valueOf(amountText));
+                }else {
+                    if (before>count){
+                        amountText += 1;
+                        txtAmountReply.setText(String.valueOf(amountText));
+                    }
+                }
+                if (amountText<0){
+                    txtAmountReply.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+                }else {
+                    txtAmountReply.setTextColor(getResources().getColor(android.R.color.darker_gray));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
+    }
+
+    private void doPostReply() {
+        if (amountText>=0){
+            RestClient client = RestApplication.getRestClient();
+            client.postReply(txtScreenNameReply.getText()+" "+edDialogReply.getText().toString(), data.get(9),new JsonHttpResponseHandler(){
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    super.onSuccess(statusCode, headers, response);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getWindow().getDecorView().getRootView().getWindowToken(), 0);
+                    Toast.makeText(TweetDetail.this, "Reply success", Toast.LENGTH_SHORT).show();
+                    flReply.setVisibility(View.VISIBLE);
+                    flDoReply.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                    super.onFailure(statusCode, headers, throwable, errorResponse);
+                    Toast.makeText(TweetDetail.this,"Reply not success", Toast.LENGTH_SHORT).show();
+                    flReply.setVisibility(View.VISIBLE);
+                    flDoReply.setVisibility(View.GONE);
+                }
+            });
+        }
     }
 
     private void showReply() {
@@ -124,7 +167,7 @@ public class TweetDetail extends AppCompatActivity {
         imm.showSoftInput(edDialogReply, InputMethodManager.SHOW_IMPLICIT);
     }
 
-    private void setView() {
+    private void setView() throws ParseException {
         toolBarDetail.setTitle("Tweet");
         setSupportActionBar(toolBarDetail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -155,7 +198,7 @@ public class TweetDetail extends AppCompatActivity {
                 }
             }
         }
-        txtTimeStampDetail.setText(data.get(6));
+        txtTimeStampDetail.setText(getRelativeTimeAgo(data.get(6)));
         txtReTweetDetail.setText(TweetAdapter.withSuffix(Integer.parseInt(data.get(7)))+" Retweets");
         txtFavouriteDetail.setText(TweetAdapter.withSuffix(Integer.parseInt(data.get(8)))+" Likes");
     }
@@ -175,5 +218,15 @@ public class TweetDetail extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private String getRelativeTimeAgo(String rawJsonDate) throws ParseException {
+        String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+        SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
+        sf.setLenient(true);
+
+        DateFormat outputFormat = new SimpleDateFormat("KK:mm a' - 'dd MMM yy");
+
+        return outputFormat.format(sf.parse(rawJsonDate));
     }
 }

@@ -13,8 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:titleTextColor="@android:color/white"
-        android:background="@color/colorToolbar"
-        app:theme="@style/ToolbarColoredBackArrow">
+        android:background="@color/colorToolbar">
 
     </android.support.v7.widget.Toolbar>
 

@@ -3,6 +3,7 @@ package com.drowsyatmidnight.simpletwitter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -14,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -88,6 +90,12 @@ public class MainTwitter extends AppCompatActivity{
     }
 
     private void addControls() {
+        imgAvatarProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawer_layout.openDrawer(Gravity.LEFT);
+            }
+        });
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -197,6 +205,21 @@ public class MainTwitter extends AppCompatActivity{
         imgNavHeader.setOnClickListener(v -> {
             goProfile(MainTwitter.this);
         });
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                selectDrawerItem(item);
+                return false;
+            }
+        });
+    }
+
+    private void selectDrawerItem(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.nav_Person:
+                goProfile(MainTwitter.this);
+                break;
+        }
     }
 
     private void setupTabIcons() {

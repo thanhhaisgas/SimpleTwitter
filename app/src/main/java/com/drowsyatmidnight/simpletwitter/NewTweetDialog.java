@@ -52,9 +52,7 @@ public class NewTweetDialog extends DialogFragment {
     Button btnTweet;
     @BindView(R.id.imageView1)
     ImageView imgProfile;
-    private int textChange;
     private int amountText;
-    private int textChageAfter;
 
     @Nullable
     @Override
@@ -106,50 +104,59 @@ public class NewTweetDialog extends DialogFragment {
 
 
     private void countText() {
-        textChageAfter = edTweet.getText().length();
-        amountText = Integer.parseInt(txtAmount.getText().toString());
         edTweet.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                textChageAfter = edTweet.getText().length();
+
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                textChange = edTweet.getText().toString().length();
-                if (textChange>textChageAfter){
-                    amountText-=1;
+                amountText = Integer.parseInt(txtAmount.getText().toString());
+                if (before<count){
+                    amountText -= 1;
                     txtAmount.setText(String.valueOf(amountText));
                 }else {
-                    amountText+=1;
-                    txtAmount.setText(String.valueOf(amountText));
+                    if (before>count){
+                        amountText += 1;
+                        txtAmount.setText(String.valueOf(amountText));
+                    }
+                }
+
+                if (amountText<0){
+                    txtAmount.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+                }else {
+                    txtAmount.setTextColor(getResources().getColor(android.R.color.darker_gray));
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                amountText = Integer.parseInt(txtAmount.getText().toString());
+
             }
         });
     }
 
     private void postTweet() {
-        RestClient client = RestApplication.getRestClient();
-        client.postTweet(edTweet.getText().toString(), new JsonHttpResponseHandler(){
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                super.onSuccess(statusCode, headers, response);
-                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(rootView.getWindowToken(), 0);
-                dismiss();
-            }
+        if(amountText>=0){
+            RestClient client = RestApplication.getRestClient();
+            client.postTweet(edTweet.getText().toString(), new JsonHttpResponseHandler(){
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    super.onSuccess(statusCode, headers, response);
+                    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(rootView.getWindowToken(), 0);
+                    Toast.makeText(getContext(),"Post tweet success", Toast.LENGTH_SHORT).show();
+                    dismiss();
+                }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                Toast.makeText(getContext(),"Error", Toast.LENGTH_SHORT).show();
-                dismiss();
-            }
-        });
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                    super.onFailure(statusCode, headers, throwable, errorResponse);
+                    Toast.makeText(getContext(),"Error", Toast.LENGTH_SHORT).show();
+                    dismiss();
+                }
+            });
+        }
     }
 
     @Override
